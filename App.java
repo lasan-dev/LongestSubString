@@ -1,5 +1,5 @@
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class App {
 
@@ -33,16 +33,14 @@ public class App {
 
         int maxSbstrLen = 0;
 
-        for(int i = 0; i < s.length(); i++) {
-            Set<Character> subs = new HashSet<>();
-
-            for(int j = i; j < s.length(); j++) {
-                if (subs.contains(s.charAt(j))){
-                    break;
-                }
-                subs.add(s.charAt(j));
-                maxSbstrLen = Math.max(maxSbstrLen, subs.size());
+        Map<Character, Integer> lastVisitedChar = new HashMap<>();
+        for(int left = 0, right = 0; right < s.length(); right++) {
+            char currentChar = s.charAt(right);
+            if(lastVisitedChar.containsKey(currentChar) && lastVisitedChar.get(currentChar) >= left){
+                left = lastVisitedChar.get(currentChar) + 1;
             }
+            maxSbstrLen = Math.max(maxSbstrLen, right - left +1);
+            lastVisitedChar.put(currentChar, right);
         }
         return maxSbstrLen;
     }
